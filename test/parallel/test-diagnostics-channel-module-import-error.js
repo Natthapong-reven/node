@@ -1,0 +1,65 @@
+'use strict';
+const common = require('../common');
+const assert = require('assert');
+const dc = require('diagnostics_channel');
+
+const trace = dc.tracingChannel('module.import');
+const events = [];
+let lastEvent;
+
+function track(name) {
+  return (event) => {
+    // Verify every event after the first is the same object
+    if (events.length) {
+      assert.strictEqual(event, lastEvent);
+    }
+    lastEvent = event;
+
+    events.push({ name, ...event });
+  };
+}
+
+trace.subscribe({
+  start: common.mustCall(track('start')),
+  end: common.mustCall(track('end')),
+  asyncStart: common.mustCall(track('asyncStart')),
+  asyncEnd: common.mustCall(track('asyncEnd')),
+  error: common.mustCall(track('error')),
+});
+
+import('does-not-exist').then(
+  common.mustNotCall(),
+  common.mustCall((error) => {
+    // Verify order and contents of each event
+    assert.deepStrictEqual(events, [
+      {
+        name: 'start',
+        parentURL: `file://${module.filename}`,
+        url: 'does-not-exist',
+      },
+      {
+        name: 'end',
+        parentURL: `file://${module.filename}`,
+        url: 'does-not-exist',
+      },
+      {
+        name: 'error',
+        parentURL: `file://${module.filename}`,
+        url: 'does-not-exist',
+        error,
+      },
+      {
+        name: 'asyncStart',
+        parentURL: `file://${module.filename}`,
+        url: 'does-not-exist',
+        error,
+      },
+      {
+        name: 'asyncEnd',
+        parentURL: `file://${module.filename}`,
+        url: 'does-not-exist',
+        error,
+      },
+    ]);
+  })
+);

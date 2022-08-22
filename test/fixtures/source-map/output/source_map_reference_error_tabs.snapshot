@@ -1,7 +1,6 @@
-*tabs.coffee:26
-	alert "I knew it!"
-	^
-
+node:diagnostics_channel:315
+        throw err;
+        ^
 
 ReferenceError: alert is not defined
     at Object.<anonymous> (*tabs.coffee:26:2)

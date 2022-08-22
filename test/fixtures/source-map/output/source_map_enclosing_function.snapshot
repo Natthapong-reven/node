@@ -1,7 +1,6 @@
-*enclosing-call-site.js:26
-  throw err
-  ^
-
+node:diagnostics_channel:315
+        throw err;
+        ^
 
 Error: an error!
     at functionD (*enclosing-call-site.js:16:17)

@@ -1,6 +1,6 @@
-*no-source.js:2
-    throw new Error('foo');
-    ^
+node:diagnostics_channel:315
+        throw err;
+        ^
 
 Error: foo
     at Throw (*file-not-exists.ts:2:9)
