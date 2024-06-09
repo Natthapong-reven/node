@@ -132,6 +132,9 @@ class EnvironmentOptions : public Options {
   bool allow_child_process = false;
   bool allow_wasi = false;
   bool allow_worker_threads = false;
+  std::vector<std::string> allow_net_udp;
+  std::vector<std::string> allow_net_udp_in;
+  std::vector<std::string> allow_net_udp_out;
   bool experimental_repl_await = true;
   bool experimental_vm_modules = false;
   bool expose_internals = false;
