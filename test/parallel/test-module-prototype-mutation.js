@@ -7,7 +7,7 @@ const assert = require('assert');
 Object.defineProperty(Object.prototype, 'name', {
   __proto__: null,
   get: common.mustNotCall('get %Object.prototype%.name'),
-  set: function (v) {
+  set: function(v) {
     // A diagnostic_channel is created to track module loading
     // when using `require` or `import`. This class contains a
     // `name` property that would cause a false alert for this
