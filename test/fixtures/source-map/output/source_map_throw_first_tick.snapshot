@@ -1,7 +1,8 @@
 reachable
-node:diagnostics_channel:315
-        throw err;
-        ^
+*typescript-throw.ts:18
+    throw Error('an exception');
+    ^
+
 
 Error: an exception
     at branch (*typescript-throw.ts:18:11)

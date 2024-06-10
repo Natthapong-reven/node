@@ -98,17 +98,17 @@ expected.beforePreExec = new Set([
   'NativeModule internal/modules/package_json_reader',
   'Internal Binding module_wrap',
   'NativeModule internal/modules/cjs/loader',
-  'NativeModule diagnostics_channel'
+  'NativeModule diagnostics_channel',
+  'Internal Binding wasm_web_api',
+  'NativeModule internal/events/abort_listener'
 ]);
 
 expected.atRunTime = new Set([
-  'Internal Binding wasm_web_api',
   'Internal Binding worker',
   'NativeModule internal/modules/run_main',
   'NativeModule internal/net',
   'NativeModule internal/dns/utils',
   'NativeModule internal/process/pre_execution',
-  'NativeModule internal/vm/module',
   'NativeModule internal/modules/esm/utils',
 ]);
 
