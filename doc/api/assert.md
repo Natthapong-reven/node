@@ -2555,7 +2555,7 @@ allowing type coercion where necessary.
 
 **Strict assertion mode**
 
-An alias of [`assert.matchObjectStrict()`][].
+An alias of \[`assert.matchObjectStrict()`]\[].
 
 ```mjs
 import assert from 'node:assert';
@@ -2614,6 +2614,14 @@ assert.matchObjectStrict({ b: 1 }, { b: '1' });
 
 assert.notStrictEqual({ a: 1, b: 'string' }, { b: 'string', a: 1 });
 // OK
+
+const map1 = new vm.runInNewContext('new Map([["key1", "value1"], ["key2", "value2"]])');
+const map2 = new Map([
+  ['key1', 'value1'],
+  ['key2', 'value2'],
+]);
+assert.matchObjectStrict(map1, map2);
+// OK
 ```
 
 ```cjs
@@ -2626,6 +2634,14 @@ assert.matchObjectStrict({ b: 1 }, { b: '1' });
 // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to: { b: '1' }
 
 assert.notStrictEqual({ a: 1, b: 'string' }, { b: 'string', a: 1 });
+// OK
+
+const map1 = new vm.runInNewContext('new Map([["key1", "value1"], ["key2", "value2"]])');
+const map2 = new Map([
+  ['key1', 'value1'],
+  ['key2', 'value2'],
+]);
+assert.matchObjectStrict(map1, map2);
 // OK
 ```
 
