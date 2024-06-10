@@ -2549,41 +2549,57 @@ added: REPLACEME
 * `expected` {any}
 * `message` {string|Error}
 
-Tests equivalence between the actual and expected parameters by performing
-a deep comparison, ensuring that all properties and their values are equal,
-allowing type coercion where necessary.
-
-**Strict assertion mode**
-
-An alias of \[`assert.matchObjectStrict()`]\[].
+Evaluates the equivalence between the `actual` and `expected` parameters by
+performing a deep comparison. This function ensures that all properties defined
+in the `expected` parameter exactly match those in the `actual` parameter in
+both value and type, without allowing type coercion.
 
 ```mjs
 import assert from 'node:assert';
 
-assert.matchObject({ a: 1 }, { a: 1 });
+assert.matchObject({ a: 1, b: '2' }, { a: 1, b: 2 });
 // OK
 
-assert.matchObject({ b: 1 }, { b: 2 });
-// AssertionError: 1 != 2
-
-assert.matchObject({ c: 1 }, { c: '1' });
+assert.matchObject({ a: 1, b: '2', c: 3 }, { a: 1, b: 2 });
 // OK
+
+assert.matchObject({ a: { b: { c: '1' } } }, { a: { b: { c: 1 } } });
+// OK
+
+assert.matchObject({ a: 1 }, { a: 1, b: 2 });
+// AssertionError
+
+assert.matchObject({ a: 1, b: true }, { a: 1, b: 'true' });
+// AssertionError
+
+assert.matchObject({ a: { b: 2 } }, { a: { b: 2, c: 3 } });
+// AssertionError
+
 ```
 
 ```cjs
 const assert = require('node:assert');
 
-assert.matchObject({ a: 1 }, { a: 1 });
+assert.matchObject({ a: 1, b: '2' }, { a: 1, b: 2 });
 // OK
 
-assert.matchObject({ b: 1 }, { b: 2 });
-// AssertionError: 1 != 2
-
-assert.matchObject({ c: 1 }, { c: '1' });
+assert.matchObject({ a: 1, b: '2', c: 3 }, { a: 1, b: 2 });
 // OK
+
+assert.matchObject({ a: { b: { c: '1' } } }, { a: { b: { c: 1 } } });
+// OK
+
+assert.matchObject({ a: 1 }, { a: 1, b: 2 });
+// AssertionError
+
+assert.matchObject({ a: 1, b: true }, { a: 1, b: 'true' });
+// AssertionError
+
+assert.matchObject({ a: { b: 2 } }, { a: { b: 2, c: 3 } });
+// AssertionError
 ```
 
-If the values or keys are not equal, an [`AssertionError`][] is thrown with a `message`
+If the values or keys are not equal in the `expected` parameter, an [`AssertionError`][] is thrown with a `message`
 property set equal to the value of the `message` parameter. If the `message`
 parameter is undefined, a default error message is assigned. If the `message`
 parameter is an instance of an [`Error`][] then it will be thrown instead of the
@@ -2599,50 +2615,53 @@ added: REPLACEME
 * `expected` {any}
 * `message` {string|Error}
 
-Tests strict equivalence between the actual and expected parameters by performing a
-deep comparison, ensuring that all properties and their values are strictly equal,
-without type coercion.
+Assesses the equivalence between the `actual` and `expected` parameters through a
+deep comparison, ensuring that all properties in the `expected` parameter are
+present in the `actual` parameter with equivalent values, permitting type coercion
+where necessary.
 
 ```mjs
-import assert from 'node:assert/strict';
+import assert from 'node:assert';
 
-assert.matchObjectStrict({ a: 1 }, { a: 1 });
+assert.matchObject({ a: 1, b: 2 }, { a: 1, b: 2 });
 // OK
 
-assert.matchObjectStrict({ b: 1 }, { b: '1' });
-// AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to: { b: '1' }
-
-assert.notStrictEqual({ a: 1, b: 'string' }, { b: 'string', a: 1 });
+assert.matchObject({ a: { b: { c: 1 } } }, { a: { b: { c: 1 } } });
 // OK
 
-const map1 = new vm.runInNewContext('new Map([["key1", "value1"], ["key2", "value2"]])');
-const map2 = new Map([
-  ['key1', 'value1'],
-  ['key2', 'value2'],
-]);
-assert.matchObjectStrict(map1, map2);
+assert.matchObject({ a: 1, b: 2, c: 3 }, { a: 1, b: 2 });
 // OK
+
+assert.matchObject({ a: 1 }, { a: 1, b: 2 });
+// AssertionError
+
+assert.matchObject({ a: 1, b: '2' }, { a: 1, b: 2 });
+// AssertionError
+
+assert.matchObject({ a: { b: 2 } }, { a: { b: '2' } });
+// AssertionError
 ```
 
 ```cjs
-const assert = require('node:assert/strict');
+const assert = require('node:assert');
 
-assert.matchObjectStrict({ a: 1 }, { a: 1 });
+assert.matchObject({ a: 1, b: 2 }, { a: 1, b: 2 });
 // OK
 
-assert.matchObjectStrict({ b: 1 }, { b: '1' });
-// AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to: { b: '1' }
-
-assert.notStrictEqual({ a: 1, b: 'string' }, { b: 'string', a: 1 });
+assert.matchObject({ a: { b: { c: 1 } } }, { a: { b: { c: 1 } } });
 // OK
 
-const map1 = new vm.runInNewContext('new Map([["key1", "value1"], ["key2", "value2"]])');
-const map2 = new Map([
-  ['key1', 'value1'],
-  ['key2', 'value2'],
-]);
-assert.matchObjectStrict(map1, map2);
+assert.matchObject({ a: 1, b: 2, c: 3 }, { a: 1, b: 2 });
 // OK
+
+assert.matchObject({ a: 1 }, { a: 1, b: 2 });
+// AssertionError
+
+assert.matchObject({ a: 1, b: '2' }, { a: 1, b: 2 });
+// AssertionError
+
+assert.matchObject({ a: { b: 2 } }, { a: { b: '2' } });
+// AssertionError
 ```
 
 Due to the confusing error-prone notation, avoid a string as the second

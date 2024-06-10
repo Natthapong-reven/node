@@ -18,8 +18,21 @@ function createDeepNestedObject() {
   return { level1: { level2: { level3: 'deepValue' } } };
 }
 
+
 // Test cases
 describe('Object Comparison Tests', function() {
+  it('should strictly compare two non identical simple objects', function() {
+    const obj1 = { a: 1, b: 'foo', c: 'bar' };
+    const obj2 = { a: 1, c: 'bar' };
+    assert.matchObjectStrict(obj1, obj2);
+  });
+
+  it('should loosely compare two non identical simple objects', function() {
+    const obj1 = { a: 1, b: 'foo', c: '1' };
+    const obj2 = { a: 1, c: 1 };
+    assert.matchObject(obj1, obj2);
+  });
+
   it('should strictly compare two identical simple objects', function() {
     const obj1 = { a: 1, b: 'string' };
     const obj2 = { a: 1, b: 'string' };
@@ -68,10 +81,10 @@ describe('Object Comparison Tests', function() {
     assert.matchObjectStrict(obj1, obj2);
   });
 
-  it('should not strictly compare two objects with different circular references', function() {
+  it('should strictly compare two objects with different circular references', function() {
     const obj1 = createCircularObject();
     const obj2 = { self: {} };
-    assert.throws(() => assert.matchObjectStrict(obj1, obj2), Error);
+    assert.matchObjectStrict(obj1, obj2);
   });
 
   it('should loosely compare two objects with circular references', function() {
@@ -193,7 +206,7 @@ describe('Object Comparison Tests', function() {
   it('should loosely compare two objects with undefined and missing properties', function() {
     const obj1 = { a: undefined };
     const obj2 = {};
-    assert.throws(() => assert.matchObject(obj1, obj2), Error);
+    assert.matchObject(obj1, obj2);
   });
 
   it('should strictly compare two objects with mixed types of properties', function() {
@@ -239,7 +252,7 @@ describe('Object Comparison Tests', function() {
   it('should not strictly compare two objects with different TypedArray instances', function() {
     const obj1 = { typedArray: new Uint8Array([1, 2, 3]) };
     const obj2 = { typedArray: new Uint8Array([1, 2, 3]) };
-    assert.throws(() => assert.matchObjectStrict(obj1, obj2), Error);
+    assert.matchObjectStrict(obj1, obj2);
   });
 
   it('should strictly compare two Map objects with identical entries', function() {
