@@ -2539,6 +2539,96 @@ assert.throws(throwingFirst, /Second$/);
 // AssertionError [ERR_ASSERTION]
 ```
 
+## `assert.matchObject(actual, expected[, message])`
+
+<!-- YAML
+added: REPLACEME
+-->
+
+* `actual` {any}
+* `expected` {any}
+* `message` {string|Error}
+
+Tests equivalence between the actual and expected parameters by performing
+a deep comparison, ensuring that all properties and their values are equal,
+allowing type coercion where necessary.
+
+**Strict assertion mode**
+
+An alias of [`assert.matchObjectStrict()`][].
+
+```mjs
+import assert from 'node:assert';
+
+assert.matchObject({ a: 1 }, { a: 1 });
+// OK
+
+assert.matchObject({ b: 1 }, { b: 2 });
+// AssertionError: 1 != 2
+
+assert.matchObject({ c: 1 }, { c: '1' });
+// OK
+```
+
+```cjs
+const assert = require('node:assert');
+
+assert.matchObject({ a: 1 }, { a: 1 });
+// OK
+
+assert.matchObject({ b: 1 }, { b: 2 });
+// AssertionError: 1 != 2
+
+assert.matchObject({ c: 1 }, { c: '1' });
+// OK
+```
+
+If the values or keys are not equal, an [`AssertionError`][] is thrown with a `message`
+property set equal to the value of the `message` parameter. If the `message`
+parameter is undefined, a default error message is assigned. If the `message`
+parameter is an instance of an [`Error`][] then it will be thrown instead of the
+`AssertionError`.
+
+## `assert.matchObjectStrict(actual, expected[, message])`
+
+<!-- YAML
+added: REPLACEME
+-->
+
+* `actual` {any}
+* `expected` {any}
+* `message` {string|Error}
+
+Tests strict equivalence between the actual and expected parameters by performing a
+deep comparison, ensuring that all properties and their values are strictly equal,
+without type coercion.
+
+```mjs
+import assert from 'node:assert/strict';
+
+assert.matchObjectStrict({ a: 1 }, { a: 1 });
+// OK
+
+assert.matchObjectStrict({ b: 1 }, { b: '1' });
+// AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to: { b: '1' }
+
+assert.notStrictEqual({ a: 1, b: 'string' }, { b: 'string', a: 1 });
+// OK
+```
+
+```cjs
+const assert = require('node:assert/strict');
+
+assert.matchObjectStrict({ a: 1 }, { a: 1 });
+// OK
+
+assert.matchObjectStrict({ b: 1 }, { b: '1' });
+// AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to: { b: '1' }
+
+assert.notStrictEqual({ a: 1, b: 'string' }, { b: 'string', a: 1 });
+// OK
+```
+
 Due to the confusing error-prone notation, avoid a string as the second
 argument.
 
