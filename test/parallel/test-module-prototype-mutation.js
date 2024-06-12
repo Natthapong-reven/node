@@ -14,8 +14,6 @@ Object.defineProperty(Object.prototype, 'name', {
     // test case. See Channel.prototype.name.
     if (!(this instanceof Channel)) {
       common.mustNotCall('set %Object.prototype%.name')(v);
-    } else {
-      this.name = v;
     }
   },
   enumerable: false,
