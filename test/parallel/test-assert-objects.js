@@ -223,16 +223,22 @@ describe('Object Comparison Tests', function() {
     assert.throws(() => assert.matchObjectStrict(obj1, obj2), Error);
   });
 
-  it('should strictly compare two objects with identical Typed Array properties', function() {
+  it('should strictly compare two objects with the same TypedArray instance', function() {
     const typedArray = new Uint8Array([1, 2, 3]);
     const obj1 = { typedArray: typedArray };
     const obj2 = { typedArray: typedArray };
     assert.matchObjectStrict(obj1, obj2);
   });
 
-  it('should not strictly compare two objects with different Typed Array instances', function() {
+  it('should not strictly compare two objects with different TypedArray instances and content', function() {
     const obj1 = { typedArray: new Uint8Array([1, 2, 3]) };
     const obj2 = { typedArray: new Uint8Array([4, 5, 6]) };
+    assert.throws(() => assert.matchObjectStrict(obj1, obj2), Error);
+  });
+
+  it('should not strictly compare two objects with different TypedArray instances', function() {
+    const obj1 = { typedArray: new Uint8Array([1, 2, 3]) };
+    const obj2 = { typedArray: new Uint8Array([1, 2, 3]) };
     assert.throws(() => assert.matchObjectStrict(obj1, obj2), Error);
   });
 
