@@ -138,8 +138,8 @@ describe('Object Comparison Tests', function() {
   });
 
   it('should not strictly compare two objects with different Symbols', function() {
-    const sym1 = Symbol('test1');
-    const sym2 = Symbol('test2');
+    const sym1 = Symbol('test');
+    const sym2 = Symbol('test');
     const obj1 = { [sym1]: 'symbol' };
     const obj2 = { [sym2]: 'symbol' };
     assert.throws(() => assert.matchObjectStrict(obj1, obj2), Error);
