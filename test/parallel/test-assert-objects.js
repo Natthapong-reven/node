@@ -99,14 +99,14 @@ describe('Object Comparison Tests', function() {
   });
 
   it('should strictly compare two Date objects with the same time', function() {
-    const date1 = new Date('2024-06-10T12:00:00Z');
-    const date2 = new Date('2024-06-10T12:00:00Z');
+    const date1 = new Date(0);
+    const date2 = new Date(0);
     assert.matchObjectStrict(date1, date2);
   });
 
   it('should not strictly compare two Date objects with different times', function() {
-    const date1 = new Date('2024-06-10T12:00:00Z');
-    const date2 = new Date('2024-06-11T12:00:00Z');
+    const date1 = new Date(0);
+    const date2 = new Date(1);
     assert.throws(() => assert.matchObjectStrict(date1, date2), Error);
   });
 
