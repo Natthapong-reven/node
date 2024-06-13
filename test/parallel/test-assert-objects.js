@@ -111,12 +111,8 @@ describe('Object Comparison Tests', function() {
   });
 
   it('should strictly compare two objects with large number of properties', function() {
-    const obj1 = Array.from({ length: 100 }, (_, i) => ({
-      [`key${i}`]: i,
-    })).reduce((acc, cur) => ({ ...acc, ...cur }), {});
-    const obj2 = Array.from({ length: 100 }, (_, i) => ({
-      [`key${i}`]: i,
-    })).reduce((acc, cur) => ({ ...acc, ...cur }), {});
+    const obj1 = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`key${i}`, i]));
+    const obj2 = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`key${i}`, i]));
     assert.matchObjectStrict(obj1, obj2);
   });
 
