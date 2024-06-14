@@ -301,6 +301,13 @@ describe('Object Comparison Tests', function() {
     const set2 = new Set(['value1', 'value3']);
     assert.throws(() => assert.matchObjectStrict(set1, set2), Error);
   });
+  
+  it('should compare plain objects from different realms', function() {
+    assert.matchObjectStrict(
+      vm.runInNewContext('({ a: 1, b: 2n, c: "3", d: /4/, e: new Set([5]), f: [6], g: new Uint8Array })'),
+      { b: 2n, e: new Set([5]), f: [6], g: new Uint8Array() }
+    );
+  });
 
   it('should strictly compare two objects with identical getter/setter properties', function() {
     const createObjectWithGetterSetter = () => {
