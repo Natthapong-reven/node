@@ -291,7 +291,7 @@ describe('Object Comparison Tests', function() {
   });
 
   it('should not strictly compare two Set objects from different realms with different values', function() {
-    const set1 = new vm.runInNewContext('new Set(["value1", "value2"])');
+    const set1 = new vm.runInNewContext('Set')(["value1", "value2"]));
     const set2 = new Set(['value1', 'value3']);
     assert.throws(() => assert.matchObjectStrict(set1, set2), Error);
   });
