@@ -282,7 +282,7 @@ describe('Object Comparison Tests', function() {
   });
 
   it('should strictly compare two Map objects from different realms with identical entries', function() {
-    const map1 = new vm.runInNewContext('new Map([["key1", "value1"], ["key2", "value2"]])');
+    const map1 = new vm.runInNewContext('Map')([["key1", "value1"], ["key2", "value2"]]));
     const map2 = new Map([
       ['key1', 'value1'],
       ['key2', 'value2'],
