@@ -2574,7 +2574,6 @@ assert.matchObject({ a: 1, b: true }, { a: 1, b: 'true' });
 
 assert.matchObject({ a: { b: 2 } }, { a: { b: 2, c: 3 } });
 // AssertionError
-
 ```
 
 ```cjs
