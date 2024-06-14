@@ -441,10 +441,7 @@ MaybeLocal<Value> GetECPubKey(
       nullptr).FromMaybe(Local<Object>());
 }
 
-MaybeLocal<Value> GetECGroup(
-    Environment* env,
-    const EC_GROUP* group,
-    const ECPointer& ec) {
+MaybeLocal<Value> GetECGroupBits(Environment* env, const EC_GROUP* group) {
   if (group == nullptr)
     return Undefined(env->isolate());
 
@@ -1104,8 +1101,7 @@ MaybeLocal<Object> GetEphemeralKey(Environment* env, const SSLPointer& ssl) {
 
   EscapableHandleScope scope(env->isolate());
   Local<Object> info = Object::New(env->isolate());
-  if (!SSL_get_server_tmp_key(ssl.get(), &raw_key))
-    return scope.Escape(info);
+  if (!SSL_get_peer_tmp_key(ssl.get(), &raw_key)) return scope.Escape(info);
 
   Local<Context> context = env->context();
   crypto::EVPKeyPointer key(raw_key);
@@ -1324,14 +1320,10 @@ MaybeLocal<Object> X509ToObject(
   } else if (ec) {
     const EC_GROUP* group = EC_KEY_get0_group(ec.get());
 
-    if (!Set<Value>(context,
-                    info,
-                    env->bits_string(),
-                    GetECGroup(env, group, ec)) ||
-        !Set<Value>(context,
-                    info,
-                    env->pubkey_string(),
-                    GetECPubKey(env, group, ec))) {
+    if (!Set<Value>(
+            context, info, env->bits_string(), GetECGroupBits(env, group)) ||
+        !Set<Value>(
+            context, info, env->pubkey_string(), GetECPubKey(env, group, ec))) {
       return MaybeLocal<Object>();
     }
 
