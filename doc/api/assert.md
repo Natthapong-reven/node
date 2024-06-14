@@ -2589,7 +2589,7 @@ assert.matchObject({ a: { b: { c: '1' } } }, { a: { b: { c: 1 } } });
 // OK
 
 assert.matchObject({ a: 1 }, { a: 1, b: 2 });
-// AssertionError
+// AssertionError: Expected key b
 
 assert.matchObject({ a: 1, b: true }, { a: 1, b: 'true' });
 // AssertionError
