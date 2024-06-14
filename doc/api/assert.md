@@ -2594,8 +2594,8 @@ assert.matchObject({ a: 1 }, { a: 1, b: 2 });
 assert.matchObject({ a: 1, b: true }, { a: 1, b: 'true' });
 // AssertionError
 
-assert.matchObject({ a: { b: 2 } }, { a: { b: 2, c: 3 } });
-// AssertionError
+assert.matchObject({ a: { b: 2, d: 4 } }, { a: { b: 2, c: 3 } });
+// AssertionError: Expected key c
 ```
 
 If the values or keys are not equal in the `expected` parameter, an [`AssertionError`][] is thrown with a `message`
