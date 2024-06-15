@@ -110,9 +110,11 @@ joinTests.push([
       [['c:.', 'file'], 'c:file'],
       [['c:', '/'], 'c:\\'],
       [['c:', 'file'], 'c:\\file'],
+      [[new URL('file:///C:/hello'), 'foo'], 'C:\\hello\\foo'],
     ]
   ),
 ]);
+
 joinTests.forEach((test) => {
   if (!Array.isArray(test[0]))
     test[0] = [test[0]];
@@ -133,8 +135,7 @@ joinTests.forEach((test) => {
       }
       if (actual !== expected && actualAlt !== expected) {
         const delimiter = test[0].map(JSON.stringify).join(',');
-        const message = `path.${os}.join(${delimiter})\n  expect=${
-          JSON.stringify(expected)}\n  actual=${JSON.stringify(actual)}`;
+        const message = `path.${os}.join(${delimiter})\n  expect=${JSON.stringify(expected)}\n  actual=${JSON.stringify(actual)}`;
         failures.push(`\n${message}`);
       }
     });
