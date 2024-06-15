@@ -1,6 +1,6 @@
 'use strict';
 
-require('../common');
+const common = require('../common');
 
 // This tests the CLI parser for our benchmark suite.
 
@@ -36,3 +36,34 @@ testFilterPattern([], ['foo', 'bar'], 'bar', true);
 
 testFilterPattern(['foo'], ['bar'], 'foo', false);
 testFilterPattern(['foo'], ['bar'], 'foo-bar', true);
+
+function testNoSettingsPattern(filters, excludes, filename, expectedResult) {
+  process.argv = process.argv.concat(
+    filters.flatMap((p) => ['--filter', p]),
+    excludes.flatMap((p) => ['--exclude', p]),
+    ['bench'],
+  );
+  try {
+    const cli = new CLI('');
+    assert.deepStrictEqual(cli.shouldSkip(filename), expectedResult);
+  } catch {
+    common.mustNotCall('If settings param is null, shouldn\'t throw an error');
+  }
+  process.argv = originalArgv;
+}
+
+testNoSettingsPattern([], []);
+testNoSettingsPattern([], [], 'foo', false);
+
+testNoSettingsPattern(['foo'], [], 'foo', false);
+testNoSettingsPattern(['foo'], [], 'bar', true);
+testNoSettingsPattern(['foo', 'bar'], [], 'foo', false);
+testNoSettingsPattern(['foo', 'bar'], [], 'bar', false);
+
+testNoSettingsPattern([], ['foo'], 'foo', true);
+testNoSettingsPattern([], ['foo'], 'bar', false);
+testNoSettingsPattern([], ['foo', 'bar'], 'foo', true);
+testNoSettingsPattern([], ['foo', 'bar'], 'bar', true);
+
+testNoSettingsPattern(['foo'], ['bar'], 'foo', false);
+testNoSettingsPattern(['foo'], ['bar'], 'foo-bar', true);
