@@ -8,6 +8,7 @@ const fixtures = require('../common/fixtures');
 
 const validEnvFilePath = '../fixtures/dotenv/valid.env';
 const nodeOptionsEnvFilePath = '../fixtures/dotenv/node-options.env';
+const optionalEnvFilePath = '../fixtures/dotenv/optional.env';
 
 describe('.env supports edge cases', () => {
 
@@ -21,6 +22,21 @@ describe('.env supports edge cases', () => {
     const child = await common.spawnPromisified(
       process.execPath,
       [ `--env-file=${nodeOptionsEnvFilePath}`, `--env-file=${validEnvFilePath}`, '--eval', code ],
+      { cwd: __dirname },
+    );
+    assert.strictEqual(child.stderr, '');
+    assert.strictEqual(child.code, 0);
+  });
+
+  it('supports multiple declarations, including optional ones', async () => {
+    const code = `
+      const assert = require('assert');
+      assert.strictEqual(process.env.BASIC, 'OPTIONALLY LOADED');
+      assert.strictEqual(process.env.NODE_NO_WARNINGS, '1');
+    `.trim();
+    const child = await common.spawnPromisified(
+      process.execPath,
+      [ `--env-file=${nodeOptionsEnvFilePath}`, `--env-file-optional=${optionalEnvFilePath}`, "--eval", code ],
       { cwd: __dirname },
     );
     assert.strictEqual(child.stderr, '');
@@ -50,6 +66,19 @@ describe('.env supports edge cases', () => {
     );
     assert.notStrictEqual(child.stderr.toString(), '');
     assert.strictEqual(child.code, 9);
+  });
+
+  it('should handle non-existent optional .env file', async () => {
+    const code = `
+      require('assert').strictEqual(1, 1)
+    `.trim();
+    const child = await common.spawnPromisified(
+      process.execPath,
+      ["--env-file-optional=.env", "--eval", code],
+      { cwd: __dirname },
+    );
+    assert.strictEqual(child.stderr, '');
+    assert.strictEqual(child.code, 0);
   });
 
   it('should not override existing environment variables but introduce new vars', async () => {
