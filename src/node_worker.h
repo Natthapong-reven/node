@@ -3,6 +3,7 @@
 
 #if defined(NODE_WANT_INTERNALS) && NODE_WANT_INTERNALS
 
+#include <atomic>
 #include <optional>
 #include <unordered_map>
 #include "node_exit_code.h"
@@ -76,6 +77,7 @@ class Worker : public AsyncWrap {
   static void TakeHeapSnapshot(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void LoopIdleTime(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void LoopStartTime(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void HasHooksThread(const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:
   bool CreateEnvMessagePort(Environment* env);
@@ -102,6 +104,9 @@ class Worker : public AsyncWrap {
   uintptr_t stack_base_ = 0;
   // Optional name used for debugging in inspector and trace events.
   std::string name_;
+  static std::atomic_bool hooksWorkerExists;
+  // this mutex is to synchronize ::New calls
+  static Mutex instantiationMutex;
 
   // Custom resource constraints:
   double resource_limits_[kTotalResourceLimitCount];

@@ -2,6 +2,7 @@
 'use strict';
 
 require('../common');
+
 const { readFile, __fromLoader } = require('fs');
 const assert = require('assert');
 
