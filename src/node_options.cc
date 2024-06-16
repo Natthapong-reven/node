@@ -472,6 +472,21 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
             "allow worker threads when any permissions are set",
             &EnvironmentOptions::allow_worker_threads,
             kAllowedInEnvvar);
+  AddOption("--allow-net-udp",
+            "allow host:port or ip:port to bind or connect by UDP socket "
+            "when any permissions are set",
+            &EnvironmentOptions::allow_net_udp,
+            kAllowedInEnvvar);
+  AddOption("--allow-net-udp-in",
+            "allow host:port or ip:port to bind by UDP socket "
+            "when any permissions are set",
+            &EnvironmentOptions::allow_net_udp_in,
+            kAllowedInEnvvar);
+  AddOption("--allow-net-udp-out",
+            "allow host:port or ip:port to connect by UDP socket "
+            "when any permissions are set",
+            &EnvironmentOptions::allow_net_udp_out,
+            kAllowedInEnvvar);
   AddOption("--experimental-repl-await",
             "experimental await keyword support in REPL",
             &EnvironmentOptions::experimental_repl_await,

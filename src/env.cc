@@ -936,6 +936,20 @@ Environment::Environment(IsolateData* isolate_data,
                           options_->allow_fs_write,
                           permission::PermissionScope::kFileSystemWrite);
     }
+    if (!options_->allow_net_udp.empty()) {
+      permission()->Apply(
+          this, options_->allow_net_udp, permission::PermissionScope::kNetUDP);
+    }
+    if (!options_->allow_net_udp_in.empty()) {
+      permission()->Apply(this,
+                          options_->allow_net_udp_in,
+                          permission::PermissionScope::kNetUDPIn);
+    }
+    if (!options_->allow_net_udp_out.empty()) {
+      permission()->Apply(this,
+                          options_->allow_net_udp_out,
+                          permission::PermissionScope::kNetUDPOut);
+    }
   }
 }
 
