@@ -2989,9 +2989,15 @@ constexpr std::array<std::string_view, 10> legacy_main_extensions = {
     ".js",
     ".json",
     ".node",
+#ifdef _WIN32
+    "\\index.js",
+    "\\index.json",
+    "\\index.node",
+#else
     "/index.js",
     "/index.json",
     "/index.node",
+#endif
     ".js",
     ".json",
     ".node"};
@@ -3038,6 +3044,11 @@ void BindingData::LegacyMainResolve(const FunctionCallbackInfo<Value>& args) {
 
     for (int i = 0; i < legacy_main_extensions_with_main_end; i++) {
       file_path = *initial_file_path + std::string(legacy_main_extensions[i]);
+      // TODO(huseyinacacak-janea): Remove ifdef after
+      // path.toNamespacedPath logic is ported to C++
+#ifdef _WIN32
+      file_path = "\\\\?\\" + file_path;
+#endif
 
       switch (FilePathIsFile(env, file_path)) {
         case BindingData::FilePathIsFileReturnType::kIsFile:
@@ -3075,6 +3086,11 @@ void BindingData::LegacyMainResolve(const FunctionCallbackInfo<Value>& args) {
        i < legacy_main_extensions_package_fallback_end;
        i++) {
     file_path = *initial_file_path + std::string(legacy_main_extensions[i]);
+    // TODO(huseyinacacak-janea): Remove ifdef after
+    // path.toNamespacedPath logic is ported to C++
+#ifdef _WIN32
+    file_path = "\\\\?\\" + file_path;
+#endif
 
     switch (FilePathIsFile(env, file_path)) {
       case BindingData::FilePathIsFileReturnType::kIsFile:
