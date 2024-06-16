@@ -20,13 +20,14 @@ std::string WildcardIfDir(const std::string& res) noexcept {
   uv_fs_t req;
   int rc = uv_fs_stat(nullptr, &req, res.c_str(), nullptr);
   if (rc == 0) {
-    const uv_stat_t* const s = static_cast<const uv_stat_t*>(req.ptr);
+    const auto s = static_cast<const uv_stat_t*>(req.ptr);
     if ((s->st_mode & S_IFMT) == S_IFDIR) {
       // add wildcard when directory
-      if (res.back() == node::kPathSeparator) {
+      if (res.back() == std::filesystem::path::preferred_separator) {
         return res + "*";
       }
-      return res + node::kPathSeparator + "*";
+
+      return (std::filesystem::path(res) / "*").string();
     }
   }
   uv_fs_req_cleanup(&req);
